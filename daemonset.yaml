@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: infiniband-exporter
+  namespace: aipub
+  labels:
+    app: infiniband-exporter
+spec:
+  selector:
+    matchLabels:
+      name: infiniband-exporter
+  template:
+    metadata:
+      labels:
+        name: infiniband-exporter
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        ten1010.io/gpu-mode: gpu
+      containers:
+      - name: app
+        image: asdfry/infiniband-exporter:20230912
+        command: ["python", "main.py"]
+        ports:
+        - containerPort: 8000
+          hostPort: 8000
+          protocol: TCP
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: system
+          mountPath: /sys
+      volumes:
+      - name: system
+        hostPath:
+          path: /sys
+          type: Directory

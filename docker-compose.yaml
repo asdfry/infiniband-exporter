@@ -1,0 +1,9 @@
+version: "3.6"
+
+services:
+
+  app:
+    image: asdfry/infiniband-exporter:${version}
+    build:
+      context: .
+      dockerfile: Dockerfile
